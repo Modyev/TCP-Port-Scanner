@@ -2,6 +2,7 @@ import socket
 from colorama import init as colorama_init
 from colorama import Fore
 from colorama import Style
+import time
 
 colorama_init()
 
@@ -38,11 +39,16 @@ print(f'{Fore.WHITE}({Fore.RED}2{Fore.WHITE}) {Fore.RED}Scan Top 100 Ports{Style
 print(f'{Fore.WHITE}({Fore.RED}3{Fore.WHITE}) {Fore.RED}Scan Top 500 Ports{Style.RESET_ALL}')
 print(f'{Fore.WHITE}({Fore.RED}4{Fore.WHITE}) {Fore.RED}Scan Custom Amount of Ports{Style.RESET_ALL}')
 choice = int(input(f"{Fore.CYAN}\nInput your choice: {Fore.WHITE} "))
-timeout = 1
+timeout = 0.5
+
+start = None
+
 
 if choice == 1:
     ip = input("What is the ip you want to scan its ports?\n")
     port = input("Which port you wanna scan on the ip " + ip + "\n")
+    
+    start = time.time()
     if scanner(str(ip),int(port),timeout) == True:
         openCount +=1
     else:
@@ -52,6 +58,7 @@ if choice == 1:
 elif choice == 2:
     ip = input("What is the ip you want to scan: ")
     
+    start = time.time()
     for port in Top100Ports:
         if scanner(str(ip),int(port),timeout) == True:
             openCount +=1
@@ -60,6 +67,8 @@ elif choice == 2:
 
 elif choice == 3:
     ip = input("What is the ip you want to scan: ")
+    
+    start = time.time()
     for port in Top500Ports:
             if scanner(str(ip),int(port),timeout) == True:
                 openCount +=1
@@ -70,19 +79,24 @@ elif choice == 4:
     ip = input("What is the ip you want to scan: ")
     portsCount = int(input("How many ports do you want to scan (This will scan the top 'n' Ports you will input): "))
     
+    start = time.time()
     for index in range(portsCount):
         if scanner(str(ip), int(list(top_500_ports)[index]), timeout) == True:
             openCount += 1
         else:
-            closedCount +=1
-            
-    
+            closedCount +=1    
         
         
 else:
     print("Incorrect output")
+    exit(1)
     
-print(f'\n{Fore.LIGHTYELLOW_EX}Scan Done!')
+end = time.time()
+
+timer = round(end-start,2)
+
+
+print(f'\n{Fore.LIGHTYELLOW_EX}Scan Done in {timer} Seconds!')
 print(f"{Fore.GREEN}Open Ports: {openCount}")
 print(f"{Fore.RED}Closed Ports: {closedCount}")
 
