@@ -1,6 +1,6 @@
 # TCP Port Scanner
 
-A simple Python-based port scanner that checks whether specific ports are open or closed on a given IP address. It uses the `socket` library for scanning and `colorama` for colored terminal output.
+A simple Python-based port scanner that checks whether specific ports are open or closed on a given IP address.
 
 ## Options
 - Scan a specific port
