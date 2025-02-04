@@ -13,6 +13,8 @@ top_100_ports = {80,23,443,21,22,25,3389,110,445,139,143,53,135,3306,8080,1723,1
 Top500Ports = sorted(list(top_500_ports))
 Top100Ports = sorted(list(top_100_ports))
 
+openCount = 0
+closedCount = 0
 
 def scanner(ip, port, timeout):
     socketObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,9 +23,13 @@ def scanner(ip, port, timeout):
     
     if resp == 0:
         print(f"{Fore.GREEN}Port {port} is Open!{Fore.WHITE}")
+        socketObj.close()
+        return True
     else:
         print(f"{Fore.RED}Port {port} is Closed{Fore.WHITE}")
-    socketObj.close()
+        socketObj.close()
+        return False
+
 
     
 
@@ -37,31 +43,48 @@ timeout = 1
 if choice == 1:
     ip = input("What is the ip you want to scan its ports?\n")
     port = input("Which port you wanna scan on the ip " + ip + "\n")
-    scanner(str(ip),int(port),timeout)
+    if scanner(str(ip),int(port),timeout) == True:
+        openCount +=1
+    else:
+        closedCount +=1
+        
 
 elif choice == 2:
     ip = input("What is the ip you want to scan: ")
     
     for port in Top100Ports:
-        scanner(str(ip), int(port), timeout)
+        if scanner(str(ip),int(port),timeout) == True:
+            openCount +=1
+        else:
+            closedCount +=1
 
 elif choice == 3:
     ip = input("What is the ip you want to scan: ")
     for port in Top500Ports:
-        scanner(str(ip), int(port), timeout)
+            if scanner(str(ip),int(port),timeout) == True:
+                openCount +=1
+            else:
+                closedCount+=1
 
 elif choice == 4:
     ip = input("What is the ip you want to scan: ")
     portsCount = int(input("How many ports do you want to scan (This will scan the top 'n' Ports you will input): "))
     
     for index in range(portsCount):
-        scanner(str(ip), int(list(top_500_ports)[index]), timeout)
+        if scanner(str(ip), int(list(top_500_ports)[index]), timeout) == True:
+            openCount += 1
+        else:
+            closedCount +=1
+            
+    
         
         
 else:
     print("Incorrect output")
     
-    
+print(f'\n{Fore.LIGHTYELLOW_EX}Scan Done!')
+print(f"{Fore.GREEN}Open Ports: {openCount}")
+print(f"{Fore.RED}Closed Ports: {closedCount}")
 
 #print(f"{Fore.BLUE} Amount of Open Ports: {openCount}")
 #print(f"{Fore.MAGENTA} Amount of Closed Ports: {closedCount}")
