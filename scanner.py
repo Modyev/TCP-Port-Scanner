@@ -16,14 +16,15 @@ Top100Ports = sorted(list(top_100_ports))
 
 def scanner(ip, port, timeout):
     socketObj = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    socketObj.settimeout(timeout)
     resp = socketObj.connect_ex((ip,port))
     
     if resp == 0:
         print(f"{Fore.GREEN}Port {port} is Open!{Fore.WHITE}")
-        return True
     else:
         print(f"{Fore.RED}Port {port} is Closed{Fore.WHITE}")
-        return False
+    socketObj.close()
+
     
 
 print(f'{Fore.WHITE}({Fore.RED}1{Fore.WHITE}) {Fore.RED}Scan a Specific Port{Style.RESET_ALL}')
@@ -47,7 +48,7 @@ elif choice == 2:
 elif choice == 3:
     ip = input("What is the ip you want to scan: ")
     for port in Top500Ports:
-        scanner(str(ip), int(port), timeout) == True
+        scanner(str(ip), int(port), timeout)
 
 elif choice == 4:
     ip = input("What is the ip you want to scan: ")
